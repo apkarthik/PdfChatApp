@@ -17,6 +17,35 @@ A simple and intuitive chatbot application that allows you to chat with your PDF
 
 ## Installation
 
+### Quick Setup (Recommended)
+
+For the fastest setup, use the provided setup scripts:
+
+**On macOS/Linux:**
+```bash
+./setup.sh
+```
+
+**On Windows:**
+```bash
+setup.bat
+```
+
+The setup script will:
+- Create a virtual environment
+- Install all dependencies
+- Create the `.env` file for you to add your API key
+- Create the `pdfs` folder
+
+**Then:**
+1. Edit `.env` and add your OpenAI API key
+2. Add PDF files to the `pdfs` folder
+3. Run: `chainlit run app.py`
+
+See [QUICKSTART.md](QUICKSTART.md) for a quick start guide.
+
+### Manual Installation
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/apkarthik/PdfChatApp.git
