@@ -26,11 +26,14 @@ def load_and_process_pdfs():
         return None, "No PDF files found in the 'pdfs' folder. Please add some PDF files and restart the app."
     
     # Load PDFs
-    loader = PyPDFDirectoryLoader(PDF_FOLDER)
-    documents = loader.load()
+    try:
+        loader = PyPDFDirectoryLoader(PDF_FOLDER)
+        documents = loader.load()
+    except Exception as e:
+        return None, f"Error loading PDF files: {str(e)}. Please ensure PDFs are valid and not password-protected."
     
     if not documents:
-        return None, "Could not load any documents from PDF files."
+        return None, "Could not load any text from PDF files. They may be empty, corrupted, or contain only images."
     
     # Split documents into chunks
     text_splitter = RecursiveCharacterTextSplitter(
@@ -41,7 +44,8 @@ def load_and_process_pdfs():
     chunks = text_splitter.split_documents(documents)
     
     # Create embeddings and vector store
-    embeddings = OpenAIEmbeddings()
+    embedding_model = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-ada-002")
+    embeddings = OpenAIEmbeddings(model=embedding_model)
     
     # Create or load vector store
     vectorstore = Chroma.from_documents(
@@ -82,7 +86,7 @@ async def start():
     model_name = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
     
     llm = ChatOpenAI(
-        model_name=model_name,
+        model=model_name,
         temperature=0
     )
     

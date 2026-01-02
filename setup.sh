@@ -20,11 +20,7 @@ python3 -m venv venv
 
 # Activate virtual environment
 echo "🔧 Activating virtual environment..."
-if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
-    source venv/Scripts/activate
-else
-    source venv/bin/activate
-fi
+source venv/bin/activate
 
 # Install dependencies
 echo "📥 Installing dependencies..."
