@@ -120,7 +120,7 @@ async def main(message: cl.Message):
     await msg.send()
     
     # Get response from chain
-    response = await chain.ainvoke({"question": message.content})
+    response = await cl.make_async(chain.invoke)({"question": message.content})
     
     answer = response["answer"]
     source_documents = response.get("source_documents", [])
@@ -131,7 +131,9 @@ async def main(message: cl.Message):
         for doc in source_documents:
             source = doc.metadata.get("source", "Unknown")
             page = doc.metadata.get("page", "N/A")
-            sources.add(f"{os.path.basename(source)} (Page {page + 1})")
+            # PyPDF uses 0-based page numbering, so we add 1 for display
+            page_display = page + 1 if isinstance(page, int) else page
+            sources.add(f"{os.path.basename(source)} (Page {page_display})")
         
         sources_text = "\n\n📚 **Sources:**\n" + "\n".join(f"- {s}" for s in sources)
         answer = answer + sources_text
